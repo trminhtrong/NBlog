@@ -1,4 +1,8 @@
-﻿@model EntryController.EditModel
+﻿@{
+    Layout = "~/Themes/Default/Views/orinal_Layout.cshtml";
+}
+
+@model EntryController.EditModel
 @{
     var IsCreating = string.IsNullOrWhiteSpace(Model.Slug);
     ViewBag.Title = IsCreating ? "New Post" : "Edit Post - " + Model.Title;

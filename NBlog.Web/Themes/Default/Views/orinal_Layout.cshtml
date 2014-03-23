@@ -11,20 +11,34 @@
     <meta name="description" content="@Model.Config.MetaDescription">
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
 
-    <link href="~/Themes/Default/customStyle.css" rel="stylesheet" />
-    <script src="~/Scripts/customLayout/arial.js"></script>
-    <script src="~/Scripts/customLayout/cuf_run.js"></script>
-    <script src="~/Scripts/customLayout/cufon-yui.js"></script>
+    <link href="@Url.Action("Index", "Feed")" rel="alternate" type="application/rss+xml" title="@Model.Config.Title" />
+
+	<link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="@Url.Action("Css", "Resource", new { theme = "default" })">
 
 	<script src="@Url.Content("~/scripts/modernizr-1.5.min.js")"></script>
 
 </head>
- <body>
+<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
 
 <div id="container">
-    <div class="header">
-        <div class="header_resize">
-          <div id="topbar">
+	<header>
+		<div id="site">
+            <a href="@Url.Action("Index", "Home")">
+			    <div id="site-name">
+				    @Model.Config.Heading
+			    </div>
+			    <div id="tag-line">@Model.Config.Tagline</div>
+            </a>
+		</div>
+
+		<div id="topbar">
 			<div id="links" class="text-links">
                 @(Model.User.IsAuthenticated ? Html.Safe("<strong>" + Model.User.FriendlyName + "</strong> |") : Html.Blank())
                 @TwitterLink(@Model.Config.TwitterUsername)
@@ -32,68 +46,27 @@
                 @Html.ActionLink("Contact", "Index", "Contact") |
 				@(Model.User.IsAuthenticated ? Html.ActionLink("Sign Out", "Logout", "Authentication") : Html.ActionLink("Sign In", "Login", "Authentication"))
 			</div>
+			<div id="search">
+				<form action="@Url.Action("Index", "Search")">
+					<input type="text" class="box" name="q" />
+				</form>
+			</div>
 		</div>
-          <div class="clr"></div>
-          <div class="logo">
-            <h1><a href="http://trminhtrong-001-site1.myasp.net/">NBlog Demo<br />
-              <small>TMTrong</small></a></h1>
-          </div>
-          <div class="clr"></div>
-          <img src="images/image.jpg" width="930" height="160" alt="" />
-          <div class="clr"></div>
+	</header>
+    
+    <div id="main">
+        <div class="crossbar text-links">
+            @if (IsSectionDefined("Crossbar"))
+            {
+                @RenderSection("Crossbar", required: false)
+            }
+            else
+            {
+                @Html.Safe(Model.Config.Crossbar)
+            }
         </div>
-      </div>
-
-  <div class="content">
-    <div class="content_resize">
-      <div class="mainbar">
-        <div class="article">
-              @RenderBody()
-        </div>
-      </div>
-      <div class="sidebar">
-        <div class="searchform">
-          <form id="formsearch" name="formsearch" method="post" action="#">
-            <input name="button_search" src="images/search_btn.gif" class="button_search" type="image" />
-            <span>
-            <input name="editbox_search" class="editbox_search" id="editbox_search" maxlength="80" value="Search" type="text" />
-            </span>
-            <div class="clr"></div>
-          </form>
-        </div>
-        <div class="gadget">
-          <h2 class="star"><span>Sidebar</span> Menu</h2>
-          <ul class="sb_menu">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">TemplateInfo</a></li>
-            <li><a href="#">Style Demo</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Archives</a></li>
-            <li><a href="#">Website Templates</a></li>
-          </ul>
-        </div>
-        <div class="gadget">
-          <h2 class="star"><span>Sponsors</span></h2>
-          <ul class="ex_menu">
-            <li><a href="#">DreamTemplate</a><br />
-              Over 6,000+ Premium Web Templates</li>
-            <li><a href="#">TemplateSOLD</a><br />
-              Premium WordPress &amp; Joomla Themes</li>
-            <li><a href="#">ImHosted.com</a><br />
-              Affordable Web Hosting Provider</li>
-            <li><a href="#">DreamStock</a><br />
-              Download Amazing Stock Photos</li>
-            <li><a href="#">Evrsoft</a><br />
-              Website Builder Software &amp; Tools</li>
-            <li><a href="#">MyVectorStore</a><br />
-              Royalty Free Stock Icons</li>
-          </ul>
-        </div>
-      </div>
-      <div class="clr"></div>
-    </div>
-  </div>
-
+	    @RenderBody()
+    </div>	
 
 	<footer class="text-links">
         Powered by <a href="http://chrisfulstow.com/nblog">NBlog</a> Build @BuildNumberProvider.GetBuildNumber()
